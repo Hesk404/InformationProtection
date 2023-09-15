@@ -8,12 +8,6 @@ var file = File.ReadAllLines("Resources/Alphabet.txt");
 
 
 var probabilitysStrings =  file[1].Split(';');
-//float[] probabilitys = new float[probabilitysStrings.Length];
-
-//for (int i = 0; i < probabilitys.Count(); i++)
-//{
-//    probabilitys[i] = float.Parse(probabilitysStrings[i]);
-//}
 
 for(int i = 0; i < file[0].Length; i++)
 {
@@ -116,7 +110,6 @@ string TextFromFile()
 List<Pair> GenRandomAlphabet()
 {
     var rand = new Random();
-    int next = 0;
 
     List<Pair> alph = alphabet.ToList();
 
@@ -165,7 +158,7 @@ void PolybiusEncryptDecrypt()
     int key = 4;
     int shift = 1;
 
-    int offset = 7;
+    int offset = 5;
 
 
     List<Pair> randomizedAlphabet = GenRandomAlphabet();
@@ -194,8 +187,6 @@ void PolybiusEncryptDecrypt()
     }
     Console.WriteLine($"Encrypted text: {encryptedText}");
 
-    //Console.WriteLine("Decryption...");
-
     StringBuilder sb = new StringBuilder();
 
 
@@ -206,7 +197,6 @@ void PolybiusEncryptDecrypt()
         for (int i = randomizedAlphabet.Count - offset; i < randomizedAlphabet.Count; i++)
             tmps.Add(randomizedAlphabet[i]);
 
-        //var perm = GeneratePermutations(tmps);
         var perm = GetPermutations(tmps, tmps.Count);
 
         List<Pair> tmpsAlphabet = randomizedAlphabet.ToList();
@@ -218,15 +208,12 @@ void PolybiusEncryptDecrypt()
 
         foreach (var item in perm)
         {
-            //var tmpList = tmpsAlphabet.ToList();
             tmpItem = item.ToList();
             for (int i = tmpsAlphabet.Count - offset; i < tmpsAlphabet.Count; i++)
             {
                 tmpsAlphabet[i] = item.ElementAt(tmp);
                 tmp++;
             }
-            //EchoAlphabetTable(tmpsAlphabet, key);
-            //Console.WriteLine();
 
             for (int i = 0; i < encryptedText.Count(); i++)
             {
@@ -242,40 +229,18 @@ void PolybiusEncryptDecrypt()
                         }
                     }
                 }
-                //Console.WriteLine($"{encryptedText[i]} -> {decryptedText[i]}");
             }
 
-            //Console.WriteLine($"Decrypted text: {decryptedText}");
-
             List<Pair> symbolCounts = new List<Pair>();
-            //for (int i = 0; i < decryptedText.Length; i++)
-            //{
-            //    for (int j = 0; j < alphabet.Count; j++)
-            //    {
-            //        if (symbolCounts.Count() < alphabet.Count)
-            //            symbolCounts.Add(new Pair(alphabet[j].Key, 0.0f));
-            //        if (decryptedText[i] == alphabet[j].Key)
-            //        {
-            //            symbolCounts[j].Value++;
-            //        }
-            //    }
-            //}
-
 
             for(int i = 0; i < alphabet.Count; i++)
             {
                 symbolCounts.Add(new Pair(alphabet[i].Key, decryptedText.Where(x => x == alphabet[i].Key).Count()));
             }
-            //var counts = decryptedText.Where(x => x == alphabet[0].Key).Count();
 
-
-
-
-            //List<Pair> symbolProbability = new List<Pair>();
             float difference = 0.0f;
             for (int i = 0; i < symbolCounts.Count; i++)
             {
-                //symbolProbability.Add(new Pair(symbolCounts[i].Key, MathF.Round(symbolCounts[i].Value / decryptedText.Length, 3)));
                 difference += MathF.Pow(MathF.Round(symbolCounts[i].Value / decryptedText.Length, 3) - alphabet[i].Value, 2);
 
             }
@@ -291,13 +256,27 @@ void PolybiusEncryptDecrypt()
 
 
         Console.WriteLine();
-        Console.WriteLine("Alphabet:");
-        EchoAlphabetTable(randomizedAlphabet, key);
-        Console.WriteLine();
-        Console.WriteLine($"Decrypted text: {decryptedTexts[differences.IndexOf(differences.Min())]}");
-        Console.WriteLine();
-        Console.WriteLine($"Min W: {differences.Min()}\r\nSequence:{ToText(perm.ElementAt(differences.IndexOf(differences.Min())).ToList())}");
-        Console.WriteLine();
+
+
+        List<float> minValues = new List<float>();
+        var tmpDiff = differences.ToList();
+        tmp = 0;
+        while(tmp != 5)
+        {
+            minValues.Add(tmpDiff.Min());
+            tmpDiff.Remove(tmpDiff.Min());
+
+            tmp++;
+        }
+
+
+        foreach (var item in minValues)
+        {
+            Console.WriteLine($"Decrypted text: {decryptedTexts[differences.IndexOf(item)]}");
+            Console.WriteLine();
+            Console.WriteLine($"Min W: {item}\r\nSequence:{ToText(perm.ElementAt(differences.IndexOf(item)).ToList())}");
+            Console.WriteLine();
+        }
 
     });
 
@@ -306,14 +285,9 @@ void PolybiusEncryptDecrypt()
     int tmp = 0;
     while(thread.IsAlive)
     {
-        
-        //Console.Write("Decryption");
-
         do { Console.Write("\b \b"); } while (Console.CursorLeft > 0);
-        
-        
+
         Console.Write("Decryption" + new string('.', tmp));
-        
 
         tmp++;
 
@@ -321,6 +295,7 @@ void PolybiusEncryptDecrypt()
             tmp = 0;
         Thread.Sleep(1500);
     }
+
 }
 
 string ToText(List<Pair> seq)
