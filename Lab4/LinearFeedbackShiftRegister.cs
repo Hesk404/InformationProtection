@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,19 +12,12 @@ namespace Lab4
         private List<int> _condition;
         private int _bitDepth;
 
-        public LinearFeedbackShiftRegister(int bitDepth) 
+        public LinearFeedbackShiftRegister(int bitDepth, bool isRandomCondition) 
         {
             _bitDepth = bitDepth;
-
             _condition = new List<int>();
-            Random rnd = new Random();
-            for(int i = 0; i < _bitDepth; i++)
-            {
-                if(i != _bitDepth - 1)
-                    _condition.Add(rnd.Next(0, 2));
-                else
-                    _condition.Add(1);
-            }
+            if (isRandomCondition)
+                GenerateInitialCondition();
         }    
 
         public LinearFeedbackShiftRegister(List<int> condition) 
@@ -32,6 +26,23 @@ namespace Lab4
             _bitDepth = condition.Count;
         }
 
+        private void GenerateInitialCondition()
+        {    
+            Random rnd = new Random();
+            for (int i = 0; i < _bitDepth; i++)
+            {
+                if (i != _bitDepth - 1)
+                    _condition.Add(rnd.Next(0, 2));
+                    //_condition.Add(0);
+                else
+                    _condition.Add(1);
+            }
+        }
+
+        public void SetCondition(List<int> condition) 
+        {
+            _condition = condition;
+        }
 
         private int Xor(int a, int b)
         {
@@ -44,12 +55,30 @@ namespace Lab4
             int next = _condition.Last();
             int newbie = Xor(_condition[_condition.Count - 1], _condition[_condition.Count - 2]);
 
-            for(int i = _condition.Count - 2; i >= 0; i--)
-            {
-                _condition[i + 1] = _condition[i];
-            }
+            int shift = 1;
 
-            _condition[0] = newbie;
+            _condition[_condition.Count() - 1] = newbie;
+
+            var tmpList = _condition.GetRange(_condition.Count - shift, shift);
+            tmpList.AddRange(_condition.GetRange(0, _condition.Count - shift));
+            _condition = tmpList.ToList();
+
+            //_condition[0] = newbie;
+
+            return next;
+        }
+
+        public int TickFromCondition()
+        {
+            int next = _condition.Last();
+            int shift = 1;
+
+            if (_condition[0] == 1)
+                shift = 2;
+
+            var tmpList = _condition.GetRange(_condition.Count - shift, shift);
+            tmpList.AddRange(_condition.GetRange(0, _condition.Count - shift));
+            _condition = tmpList.ToList();
 
             return next;
         }
