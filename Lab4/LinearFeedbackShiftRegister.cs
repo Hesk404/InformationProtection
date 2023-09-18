@@ -11,13 +11,20 @@ namespace Lab4
     {
         private List<int> _condition;
         private int _bitDepth;
+        private bool _isTickFromCondition;
 
         public LinearFeedbackShiftRegister(int bitDepth, bool isRandomCondition) 
         {
             _bitDepth = bitDepth;
             _condition = new List<int>();
             if (isRandomCondition)
+            {
                 GenerateInitialCondition();
+                _isTickFromCondition = false;
+            }
+            else
+                _isTickFromCondition = true;
+                
         }    
 
         public LinearFeedbackShiftRegister(List<int> condition) 
@@ -52,6 +59,14 @@ namespace Lab4
 
         public int Tick()
         {
+            if (!_isTickFromCondition)
+                return TickDefault();
+            else
+                return TickFromCondition();
+        }
+
+        private int TickDefault()
+        {
             int next = _condition.Last();
             int newbie = Xor(_condition[_condition.Count - 1], _condition[_condition.Count - 2]);
 
@@ -68,7 +83,7 @@ namespace Lab4
             return next;
         }
 
-        public int TickFromCondition()
+        private int TickFromCondition()
         {
             int next = _condition.Last();
             int shift = 1;
