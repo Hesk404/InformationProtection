@@ -117,13 +117,22 @@ void EncryptDecrypt()
 
 
     Console.Write("Gamma of the text: ");
-    foreach (var item in sequence2)
-        Console.Write(item);
+    for (int i = 0; i < sequence2.Count; i++)
+    {
+        if (i % 8 == 0 && i != 0)
+            Console.Write(" ");
+        Console.Write(sequence2[i]);
+    }
     Console.WriteLine();
 
     Console.Write("Text in binary code: ");
-    foreach (var t in textBinary)
-        Console.Write(t);
+    for(int i = 0; i < textBinary.Count; i++)
+    {
+        if(i % 8 == 0 && i != 0)
+            Console.Write(" ");
+        Console.Write(textBinary[i]);
+    }
+        
     Console.WriteLine();
 
     List<int> encryptedTextBinary = new List<int>();
@@ -133,8 +142,12 @@ void EncryptDecrypt()
     }
 
     Console.Write("Encrypted text in binary code: ");
-    foreach (var item in encryptedTextBinary)
-        Console.Write(item);
+    for (int i = 0; i < encryptedTextBinary.Count; i++)
+    {
+        if (i % 8 == 0 && i != 0)
+            Console.Write(" ");
+        Console.Write(encryptedTextBinary[i]);
+    }
     Console.WriteLine();
 
     Console.Write("Encrypted text: ");
@@ -148,8 +161,12 @@ void EncryptDecrypt()
     }
 
     Console.Write("Decrypted text in binary code: ");
-    foreach (var item in decryptedTextBinary)
-        Console.Write(item);
+    for (int i = 0; i < decryptedTextBinary.Count; i++)
+    {
+        if (i % 8 == 0 && i != 0)
+            Console.Write(" ");
+        Console.Write(decryptedTextBinary[i]);
+    }
     Console.WriteLine();
 
     Console.Write("Decrypted text: ");
