@@ -11,19 +11,18 @@ namespace Lab4
     {
         private List<int> _condition;
         private int _bitDepth;
-        private bool _isTickFromCondition;
+        private bool _isDefaultTick;
 
         public LinearFeedbackShiftRegister(int bitDepth, bool isRandomCondition) 
         {
             _bitDepth = bitDepth;
             _condition = new List<int>();
+            _isDefaultTick = false;
             if (isRandomCondition)
             {
+                _isDefaultTick = true;
                 GenerateInitialCondition();
-                _isTickFromCondition = false;
             }
-            else
-                _isTickFromCondition = true;
                 
         }    
 
@@ -59,7 +58,7 @@ namespace Lab4
 
         public int Tick()
         {
-            if (!_isTickFromCondition)
+            if(_isDefaultTick)
                 return TickDefault();
             else
                 return TickFromCondition();
