@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,16 +12,18 @@ namespace Lab4
     {
         private List<int> _condition;
         private int _bitDepth;
-        private bool _isDefaultTick;
+        private bool _isDefaultTick = true;
+        private List<int> _feedback;
 
-        public LinearFeedbackShiftRegister(int bitDepth, bool isRandomCondition) 
+        public LinearFeedbackShiftRegister(int bitDepth, bool isRandomCondition, List<int> feedback) 
         {
             _bitDepth = bitDepth;
             _condition = new List<int>();
-            _isDefaultTick = false;
+            _feedback = feedback;
+            //_isDefaultTick = false;
             if (isRandomCondition)
             {
-                _isDefaultTick = true;
+                //_isDefaultTick = true;
                 GenerateInitialCondition();
             }
                 
@@ -45,6 +48,39 @@ namespace Lab4
             }
         }
 
+        public void PrintCondition()
+        {
+            //Console.Write("Condition: ");
+            for(int i = 0; i < _condition.Count; i++)
+            {
+                if(i < _feedback.Count)
+                {
+                    if (_feedback[i] == 1)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(_condition[i]);
+                        Console.ResetColor();
+                    }
+                    else
+                        Console.Write(_condition[i]);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(_condition[i]);
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine();
+        }
+
+        public void PrintFeedback()
+        {
+            foreach (var item in _feedback)
+                Console.Write(item);
+            Console.WriteLine();
+        }
+
         public void SetCondition(List<int> condition) 
         {
             _condition = condition;
@@ -66,10 +102,22 @@ namespace Lab4
 
         private int TickDefault()
         {
-            int next = _condition.Last();
-            int newbie = Xor(_condition[_condition.Count - 1], _condition[_condition.Count - 2]);
-
+            // next = _condition.Last();
+            //int newbie = Xor(_condition[_condition.Count - 1], _condition[_condition.Count - 2]);
+            //newbie = Xor(_condition[_condition.Count - 3], newbie);
+            //int next = newbie;
             int shift = 1;
+            int newbie = _condition.Last();
+
+            for(int i = _condition.Count - 2; i >= 0; i--)
+            {
+                if (_feedback[i] == 1)
+                {
+                    newbie = Xor(newbie, _condition[i]);
+                }
+            }
+
+
 
             _condition[_condition.Count() - 1] = newbie;
 
@@ -79,7 +127,7 @@ namespace Lab4
 
             //_condition[0] = newbie;
 
-            return next;
+            return newbie;
         }
 
         private int TickFromCondition()
