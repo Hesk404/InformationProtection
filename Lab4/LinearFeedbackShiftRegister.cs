@@ -117,6 +117,8 @@ namespace Lab4
                 }
             }
 
+            //newbie = Xor(newbie, _condition[0]);
+
 
 
             _condition[_condition.Count() - 1] = newbie;

@@ -120,7 +120,7 @@ void EncryptDecrypt()
 
 
 
-    var blocking = (int)Math.Floor((double)textBinary.Count / block) + 1;
+    var blocking = (int)Math.Floor((double)textBinary.Count / block);
 
 
 
