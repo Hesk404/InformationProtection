@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Unicode;
 using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Lab5
 {
@@ -117,9 +118,13 @@ namespace Lab5
             text = SubByte(text, subs);
             Print(text);
 
+            Console.WriteLine("\r\nText after shift rows: ");
+            text = ShiftRows(text);
+            Print(text);
 
-
-            
+            Console.WriteLine("\r\nText after add round key: ");
+            text = AddKey(text, roundKey1);
+            Print(text);
 
         }
 
@@ -188,18 +193,38 @@ namespace Lab5
             return text;
         }
 
-        //static List<List<byte[]>> ShiftRow()
-        //{
-        //    int[] test = { 1, 2, 3, 4, 5 };
+        static List<List<byte[]>> ShiftRows(List<List<byte[]>> text)
+        {
+            //int[] test = { 1, 2, 3, 4, 5 };
 
-        //    var diff = 3;
-        //    var temp = new int[diff];
-        //    Array.Copy(test, test.Length - diff, temp, 0, diff);
-        //    Array.Copy(test, 0, test, diff, test.Length - diff);
-        //    Array.Copy(temp, 0, test, 0, temp.Length);
+            var diff = 1;
+
+            for(int i = 1; i < text.Count; i++)
+            {
+                text[i] = ShiftRow(text[i], diff);
+                diff++;
+            }
 
 
-        //}
+            return text;
+        }
+
+        static List<byte[]> ShiftRow(List<byte[]> row, int diff)
+        {
+            byte[] source = new byte[row.Count];
+
+            for(int i = 0; i < row.Count; i++)
+            {
+                source[i] = row[i][0];
+            }
+
+            var temp = new byte[diff];
+            Array.Copy(source, source.Length - diff, temp, 0, diff);
+            Array.Copy(source, 0, source, diff, source.Length - diff);
+            Array.Copy(temp, 0, source, 0, temp.Length);
+
+            return new List<byte[]> { source };
+        }
 
 
     }
