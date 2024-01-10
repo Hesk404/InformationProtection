@@ -9,76 +9,28 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            string tester = "hello world hello world hello world hello world hello world hello world hello world hello world";
+            //string tester = "hello world hello world hello world hello world hello world hello world hello world hello world";
 
-            var hash = Sha256_test.Hash(tester);
+            //var hash = Sha256_test.Hash(tester);
 
             //Console.WriteLine(BitConverter.ToString(hash.ToArray<byte>()).Replace("-", ""));
 
-            using SHA256 sha = SHA256.Create();
+            string tester = "hello k;hlf'ngfdjng;fdbgfdgmfd/kgbnsgzh13513zdgfhgxjh aT a31a&$%&*dhf e,gfdtretegfd  dfkgnlqew53151i35";
 
-            //Console.WriteLine(BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(tester))));
+            using SHA256 test = SHA256.Create();
 
+            var hash1 = BitConverter.ToString(test.ComputeHash(Encoding.UTF8.GetBytes(tester)));
 
-            var str = "hello world";
+            Console.WriteLine(hash1);
 
-            List<byte> strByte = Encoding.UTF8.GetBytes(str).ToList();
+            Sha256 sha = new Sha256(); 
+            var hash = BitConverter.ToString(sha.ComputeHash(tester));
+            Console.WriteLine(hash);
 
-            List<string> strBinary = new List<string>();
+            var s = hash == hash1;
 
-            string strB = "";
+            Console.WriteLine(s);
 
-            foreach(var b in strByte)
-            {
-                strBinary.Add(Convert.ToString(b, 2).PadLeft(8, '0'));
-                strB += Convert.ToString(b, 2).PadLeft(8, '0');
-            }
-
-            var q = BitConverter.GetBytes(strB.Length);
-            var l = string.Concat(q.Select(x => Convert.ToString(x, 2))).PadLeft(64, '0');
-
-            strB += "1";
-            while(strB.Length % 512 != 448)
-            {
-                strB += "0";
-            }
-
-            strB += l;
-
-
-            var length = CountBits(strBinary);
-
-
-            for(int i =0; i< strB.Length; i++)
-            {
-                if(i != 0 && i % 8 == 0)
-                    Console.Write(" ");
-                if(i % (8 * 4) == 0 && i != 0)
-                    Console.WriteLine();
-                Console.Write(strB[i]);
-            }
-
-        }
-
-
-        static void AddOne(List<string> strBinary)
-        {
-            strBinary.Add("10000000");
-        }
-
-        static void AddZero(List<string> strBinary)
-        {
-            strBinary.Add("00000000");
-        }
-
-        static int CountBits(List<string> strBinary)
-        {
-            int result = 0;
-            foreach(var b in strBinary)
-            {
-                result += 8;
-            }
-            return result;
         }
     }
 }
