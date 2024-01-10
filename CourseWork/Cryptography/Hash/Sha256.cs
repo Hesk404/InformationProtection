@@ -74,11 +74,11 @@ namespace Cryptography.Hash
                 strBinary += Convert.ToString(item, 2).PadLeft(8, '0');
             }
 
-            var q = BitConverter.GetBytes(strBinary.Length);
+            var strBytes = BitConverter.GetBytes(strBinary.Length);
             if (BitConverter.IsLittleEndian)
-                Array.Reverse(q);
-
-            var l = string.Concat(q.Select(x => Convert.ToString(x, 2).PadLeft(8, '0'))).PadLeft(64, '0');
+                Array.Reverse(strBytes);
+            
+            var length = string.Concat(strBytes.Select(x => Convert.ToString(x, 2).PadLeft(8, '0'))).PadLeft(64, '0');
 
             strBinary += "1";
             while (strBinary.Length % 512 != 448)
@@ -86,7 +86,7 @@ namespace Cryptography.Hash
                 strBinary += "0";
             }
 
-            strBinary += l;
+            strBinary += length;
 
             List<string> tmpStrings = new List<string>();
             for(int i = 0; i< strBinary.Length; i+=512)
