@@ -1,6 +1,6 @@
 ﻿using Cryptography.Hash;
+using Cryptography.Cipher;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Client
@@ -15,21 +15,24 @@ namespace Client
 
             //Console.WriteLine(BitConverter.ToString(hash.ToArray<byte>()).Replace("-", ""));
 
-            string tester = "hello k;hlf'ngfdjng;fdbgfdgmfd/kgbnsgzh13513zdgfhgxjh aT a31a&$%&*dhf e,gfdtretegfd  dfkgnlqew53151i35";
+            //string tester = "hello k;hlf'ngfdjng;fdbgfdgmfd/kgbnsgzh13513zdgfhgxjh aT a31a&$%&*dhf e,gfdtretegfd  dfkgnlqew53151i35";
+            //
+            //using SHA256 test = SHA256.Create();
+            //
+            //var hash1 = BitConverter.ToString(test.ComputeHash(Encoding.UTF8.GetBytes(tester)));
+            //
+            //Console.WriteLine(hash1);
+            //
+            //Sha256 sha = new Sha256(); 
+            //var hash = BitConverter.ToString(sha.ComputeHash(tester));
+            //Console.WriteLine(hash);
+            //
+            //var s = hash == hash1;
+            //
+            //Console.WriteLine(s);
 
-            using SHA256 test = SHA256.Create();
+            Rsa rsa = new Rsa();
 
-            var hash1 = BitConverter.ToString(test.ComputeHash(Encoding.UTF8.GetBytes(tester)));
-
-            Console.WriteLine(hash1);
-
-            Sha256 sha = new Sha256(); 
-            var hash = BitConverter.ToString(sha.ComputeHash(tester));
-            Console.WriteLine(hash);
-
-            var s = hash == hash1;
-
-            Console.WriteLine(s);
 
         }
     }
