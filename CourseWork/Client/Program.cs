@@ -2,6 +2,7 @@
 using Cryptography.Cipher;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace Client
 {
@@ -33,7 +34,7 @@ namespace Client
 
             Rsa rsa = new Rsa();
 
-
+            var tmp = rsa.GenerateRandom();
         }
     }
 }

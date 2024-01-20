@@ -19,13 +19,47 @@ namespace Cryptography.Cipher
         {
             var n = 1024;
 
-            var min = BigInteger.Pow(2, n - 1) + 1;
-            var max = BigInteger.Pow(2, n) - 1;
+            min = BigInteger.Pow(2, n - 1) + 1;
+            max = BigInteger.Pow(2, n) - 1;
+
         }
 
         public BigInteger GenerateRandom()
         {
-            throw new NotImplementedException();
+            
+
+            var result = BigInteger.Zero;
+
+            var minVal = new List<int>();
+            var maxVal = new List<int>();
+
+            
+
+
+            foreach (var item in min.ToString())
+                minVal.Add(int.Parse(item.ToString()));
+            foreach(var item in max.ToString())
+                maxVal.Add(int.Parse(item.ToString()));
+
+            var resultBytes = new byte[minVal.Count];
+
+            while (true)
+            {
+                for(int i = 0; i < minVal.Count; i++)
+                {
+                    //var tmp = rnd.Next(0, 10 - minVal[i]);
+                    resultBytes[i] = (byte)(minVal[i] + rnd.Next(0, 10 - minVal[i]));
+                }
+
+                result = new BigInteger(resultBytes) / 2;
+                Console.WriteLine(result);
+                if (result >= min && result <= max)
+                    return result;
+                else
+                {
+                    result = BigInteger.Zero;
+                }
+            }
         }
     }
 }
