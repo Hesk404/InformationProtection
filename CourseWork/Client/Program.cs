@@ -3,6 +3,7 @@ using Cryptography.Cipher;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Security.Cryptography;
+using System.Numerics;
 
 namespace Client
 {
@@ -34,7 +35,9 @@ namespace Client
 
             Rsa rsa = new Rsa();
 
-            var tmp = rsa.GenerateRandom();
+            rsa.GenerateKeys();
+
+            var c = BigInteger.Pow(123, (int)rsa.publicKey.First) % rsa.publicKey.Second;
         }
     }
 }
