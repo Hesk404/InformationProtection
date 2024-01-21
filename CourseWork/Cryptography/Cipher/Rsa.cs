@@ -26,6 +26,8 @@ namespace Cryptography.Cipher
             min = BigInteger.Pow(2, n - 1) + 1;
             max = BigInteger.Pow(2, n) - 1;
 
+            GenerateKeys();
+
         }
 
         private BigInteger GenerateRandom()
@@ -204,7 +206,7 @@ namespace Cryptography.Cipher
             return x % modulo;
         }
 
-        public void GenerateKeys()
+        private void GenerateKeys()
         {
             BigInteger p;
             BigInteger q;
@@ -233,6 +235,34 @@ namespace Cryptography.Cipher
 
             publicKey = new Key { First = e, Second = n };
             secretKey = new Key { First = d, Second = n };
+        }
+
+        public string Decipher(string text)
+        {
+            List<string> hexes = new List<string>();
+            hexes = text.Split('-').ToList();
+
+            List<string> resultHexes = new List<string>();  
+
+            foreach(string hex in hexes)
+            {
+                resultHexes.Add(BigInteger.ModPow(BigInteger.Parse(hex, System.Globalization.NumberStyles.HexNumber), publicKey.First, publicKey.Second).ToString("X"));
+            }
+            return string.Join('-', resultHexes);
+        }
+
+        public string Cipher(string text)
+        {
+            List<string> hexes = new List<string>();
+            hexes = text.Split('-').ToList();
+
+            List<string> resultHexes = new List<string>();
+
+            foreach(string hex in hexes)
+            {
+                resultHexes.Add(BigInteger.ModPow(BigInteger.Parse(hex, System.Globalization.NumberStyles.HexNumber), secretKey.First, secretKey.Second).ToString("X"));
+            }
+            return string.Join("-", resultHexes);
         }
     }
 }

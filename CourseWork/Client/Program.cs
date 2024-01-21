@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Security.Cryptography;
 using System.Numerics;
+using System.Globalization;
 
 namespace Client
 {
@@ -11,33 +12,26 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            //string tester = "hello world hello world hello world hello world hello world hello world hello world hello world";
+            string test = "hello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello worldhello world";
 
-            //var hash = Sha256_test.Hash(tester);
-
-            //Console.WriteLine(BitConverter.ToString(hash.ToArray<byte>()).Replace("-", ""));
-
-            //string tester = "hello k;hlf'ngfdjng;fdbgfdgmfd/kgbnsgzh13513zdgfhgxjh aT a31a&$%&*dhf e,gfdtretegfd  dfkgnlqew53151i35";
-            //
-            //using SHA256 test = SHA256.Create();
-            //
-            //var hash1 = BitConverter.ToString(test.ComputeHash(Encoding.UTF8.GetBytes(tester)));
-            //
-            //Console.WriteLine(hash1);
-            //
-            //Sha256 sha = new Sha256(); 
-            //var hash = BitConverter.ToString(sha.ComputeHash(tester));
-            //Console.WriteLine(hash);
-            //
-            //var s = hash == hash1;
-            //
-            //Console.WriteLine(s);
+            Sha256 sha = new Sha256();
+            var hash = Convert.ToHexString(sha.ComputeHash(test));
 
             Rsa rsa = new Rsa();
 
-            rsa.GenerateKeys();
+            var cipher = rsa.Cipher(hash);
 
-            var c = BigInteger.Pow(123, (int)rsa.publicKey.First) % rsa.publicKey.Second;
+            var decipher = rsa.Decipher(cipher);
+
+            //Console.WriteLine($"Hash: {hash}\r\nCipher: {cipher}\r\nDecipher: {decipher}\r\nHash is correct: {hash == decipher}");
+
+            Console.WriteLine($"Hash: {hash}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Cipher: {cipher}");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Decipher: {decipher}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Hash is correct: {hash == decipher}");
         }
     }
 }
