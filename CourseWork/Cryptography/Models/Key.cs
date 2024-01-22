@@ -11,5 +11,10 @@ namespace Cryptography.Models
     {
         public BigInteger First { get; set; }
         public BigInteger Second { get; set; }
+
+        public override string ToString()
+        {
+            return $"{{{First.ToString()}; {Second.ToString()}}}";
+        }
     }
 }

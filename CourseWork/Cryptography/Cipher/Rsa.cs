@@ -19,6 +19,16 @@ namespace Cryptography.Cipher
         public Key publicKey;
         public Key secretKey;
 
+        public BigInteger p;
+        public BigInteger q;
+
+        public BigInteger n;
+
+        public int e = 65537;
+
+        public BigInteger eilerFunction;
+        public BigInteger d;
+
         public Rsa()
         {
             var n = 1024;
@@ -29,6 +39,14 @@ namespace Cryptography.Cipher
             GenerateKeys();
 
         }
+
+        public Rsa(Key publicKey, Key secretKey)
+        {
+            this.publicKey = publicKey;
+            this.secretKey = secretKey;
+        }
+
+
 
         private BigInteger GenerateRandom()
         {
@@ -208,15 +226,6 @@ namespace Cryptography.Cipher
 
         private void GenerateKeys()
         {
-            BigInteger p;
-            BigInteger q;
-
-            BigInteger n;
-
-            var e = 65537;
-
-
-
             do
             {
                 p = GenerateRandom();
@@ -229,9 +238,9 @@ namespace Cryptography.Cipher
 
             n = p * q;
 
-            var eilerFunction = (p - 1) * (q - 1);
+            eilerFunction = (p - 1) * (q - 1);
 
-            var d = ModInverse(e, eilerFunction);
+            d = ModInverse(e, eilerFunction);
 
             publicKey = new Key { First = e, Second = n };
             secretKey = new Key { First = d, Second = n };
